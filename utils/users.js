@@ -40,4 +40,9 @@ const cekDuplikatEmail = (email) => {
   return users.find((user) => user.email === email);
 };
 
-module.exports = { dataUsersJson, addUser, cekDuplikatUser, cekDuplikatEmail };
+const cekDuplikatPassword = (password) => {
+  const users = dataUsersJson();
+  return users.find((user) => user.password === password);
+};
+
+module.exports = { dataUsersJson, addUser, cekDuplikatUser, cekDuplikatEmail, cekDuplikatPassword };

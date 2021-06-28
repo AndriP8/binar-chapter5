@@ -16,6 +16,15 @@
   <body>
     <div class="row d-flex justify-content-center text-center">
       <div class="col col-6 my-5">
+        <% if (typeof errors !== "undefined") { %>
+        <div class="alert alert-danger text-start" role="alert">
+          <ul>
+            <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+            <% }) %>
+          </ul>
+        </div>
+        <% } %>
         <h1 class="my-4"><%= formTitle %></h1>
         <form action="/login" method="post">
           <input type="email" name="email" id="email" placeholder="Input Email" class="form-control" />

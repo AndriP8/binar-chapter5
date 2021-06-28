@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const router = require("./router/index");
 const { check, body, validationResult } = require("express-validator");
-const { addUser, cekDuplikatUser, cekDuplikatEmail, dataUsersJson } = require("./utils/users");
+const { addUser, cekDuplikatUser, cekDuplikatEmail, dataUsersJson, cekDuplikatPassword } = require("./utils/users");
 let dataUsers = require("./data/users.json");
 
 const port = 3000;
@@ -18,7 +18,6 @@ app.use(express.static("public")); // built-in middleware
 app.use(express.urlencoded({ extended: true })); // built-in middleware
 app.use(express.json());
 app.use(router); // router level middleware
-
 
 app.get("/", (req, res) => {
   res.render("signUp", {
@@ -74,21 +73,38 @@ app.post(
   [
     body("email").custom((value) => {
       const duplikat = cekDuplikatEmail(value);
-      if (duplikat) {
-        return true;
+      if (!duplikat) {
+        throw new Error("Email yang anda masukan salah");
       }
+      return true;
+    }),
+    body("password").custom((value) => {
+      const duplikat = cekDuplikatPassword(value);
+      if (!duplikat) {
+        throw new Error("password yang anda masukan salah");
+      }
+      return true;
     }),
     check("email", "email tidak valid").isEmail(),
     check("password", "password harus lebih dari 5 karakter").isLength({ min: 5 }),
   ],
   (req, res) => {
-    const cekEmail = dataUsersJson();
-    cekEmail.map((i) => {
-      let { email, password } = req.body;
-      if (i.email === email && i.password === password) {
-        res.status(201).redirect("/homepage");
-      } 
-    });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render("login", {
+        title: "Halaman Sign up",
+        formTitle: "FORM SIGN UP",
+        errors: errors.array(),
+      });
+    } else {
+      const cekEmail = dataUsersJson();
+      cekEmail.map((i) => {
+        let { email, password } = req.body;
+        if (i.email === email && i.password === password) {
+          res.status(201).redirect("/homepage");
+        }
+      });
+    }
   }
 );
 
@@ -128,10 +144,10 @@ app.post("/api/v1/posts", (req, res) => {
 
 app.put("/api/v1/posts/:username", (req, res) => {
   let user = dataUsers.find((data) => data.username === req.params.username);
-  const params = { 
-    email: req.body.email, 
-    password: req.body.password 
-  } 
+  const params = {
+    email: req.body.email,
+    password: req.body.password,
+  };
   user = { ...user, ...params };
   dataUsers = dataUsers.map((i) => (i.username === user.username ? user : i));
   res.status(200).json(user);
@@ -140,8 +156,8 @@ app.put("/api/v1/posts/:username", (req, res) => {
 app.put("/api/v1/posts/:username", (req, res) => {
   let post = dataUsers.find((i) => i.username === +req.params.username);
   // menghindari parameter yg tidak di inginkan
-  const params = { email: req.body.email, password: req.body.password }
-   post = { ...post, ...params };
+  const params = { email: req.body.email, password: req.body.password };
+  post = { ...post, ...params };
 
   dataUsers = dataUsers.map((i) => (i.username === post.username ? post : i));
   res.status(200).json(post);
@@ -150,12 +166,11 @@ app.put("/api/v1/posts/:username", (req, res) => {
 app.delete("/api/v1/posts/:username", (req, res) => {
   dataUsers = dataUsers.find((data) => {
     if (data.username === +req.params.username) {
-      data
     }
-  })
+  });
   res.status(200).json({
-    message: `Sukses delete ${req.params.username}`
-  })
+    message: `Sukses delete ${req.params.username}`,
+  });
 });
 
 // error handling middleware
