@@ -155,7 +155,6 @@ app.put("/api/v1/posts/:username", (req, res) => {
 
 app.put("/api/v1/posts/:username", (req, res) => {
   let post = dataUsers.find((i) => i.username === +req.params.username);
-  // menghindari parameter yg tidak di inginkan
   const params = { email: req.body.email, password: req.body.password };
   post = { ...post, ...params };
 
@@ -164,13 +163,17 @@ app.put("/api/v1/posts/:username", (req, res) => {
 });
 
 app.delete("/api/v1/posts/:username", (req, res) => {
-  dataUsers = dataUsers.find((data) => {
-    if (data.username === +req.params.username) {
-    }
+  const { username } = req.params;
+  const deleted = dataUsers.find((data) => {
+    return data.username === username;
   });
-  res.status(200).json({
-    message: `Sukses delete ${req.params.username}`,
-  });
+  if (deleted) {
+    console.log(deleted);
+    dataUsers = dataUsers.filter((data) => {
+      data.username !== username;
+    });
+    res.status(200).json(deleted);
+  }
 });
 
 // error handling middleware
