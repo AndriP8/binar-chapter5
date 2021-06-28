@@ -1,0 +1,123 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #9c835f;
+  font-family: "Open Sans", sans-serif;
+  text-transform: uppercase;
+  font-size: 36px;
+}
+
+.header-app {
+  display: flex;
+  align-items: center;
+  margin: 16px 32px;
+}
+
+.header-app a {
+  font-size: 44px;
+  color: #724c21;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.header-app img {
+  margin-left: 32px;
+  width: 72px;
+  height: 72px;
+}
+
+.header-app h2 {
+  color: #f9b23d;
+  margin-left: 32px;
+}
+
+/* main item*/
+.main .player-title,
+.main .player,
+.main .com,
+footer .refresh {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-title h2 {
+  padding: 32px 0;
+}
+
+.player img,
+.com img {
+  cursor: pointer;
+  width: 160px;
+  height: 150px;
+  padding: 25px 20px;
+}
+
+.bgClick {
+  background-color: #c4c4c4;
+  border-radius: 30px;
+  transition: 0.5s ease-in-out;
+}
+
+.referee {
+  display: flex;
+  justify-content: center;
+}
+
+.referee .result {
+  color: #bd0000;
+  font-size: 88px;
+  position: absolute;
+  top: 366px;
+}
+
+.referee .results {
+  background-color: #4c9654;
+  border-radius: 10px;
+}
+
+.referee .draw {
+  background-color: #035b0c;
+}
+
+.referee .results,
+.referee .draw {
+  color: #fff;
+  font-size: 38px;
+  width: 271.11px;
+  height: 166.93px;
+  padding: 15px 10px;
+  transform: rotate(-20deg);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 320px;
+}
+
+.refresh span {
+  cursor: pointer;
+  font-size: 56px;
+  margin: 24px 0 64px;
+}
+
+@media screen and (max-width: 992px) {
+  .referee .result,
+  .referee .results,
+  .referee .draw {
+    transform: rotate(0deg);
+    top: 650px;
+  }
+
+  .refresh span {
+    position: relative;
+    top: 135px;
+  }
+}
